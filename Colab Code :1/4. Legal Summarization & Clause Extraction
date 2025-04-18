@@ -1,1 +1,20 @@
+# === Cell 4: Legal Summarization & Clause Extraction ===
+def summarize_legal_text(text, max_chunk=1000):
+    """Summarize contract focusing on key clauses."""
+    chunks = [text[i:i+max_chunk] for i in range(0, len(text), max_chunk)]
+    summary = ""
+    for chunk in chunks:
+        prompt = f"Summarize this legal contract clause, highlighting parties, obligations, payment, and termination:\n\n{chunk}"
+        out = summarizer(prompt, max_length=150, min_length=50, do_sample=False)[0]['summary_text']
+        summary += out + "\n\n"
+    return summary.strip()
+
+def extract_clauses(text):
+    """Use regex to pull out Parties, Term, Payment, Obligations."""
+    clauses = {}
+    clauses['Parties'] = re.findall(r'(?:between|among)\s+([^.,;\n]+)', text, re.IGNORECASE)
+    clauses['Term']    = re.findall(r'(?:Term(?:ination)?(?:\s+Clause)?)[\s\S]{0,200}?\d{1,2}[-/]\d{1,2}[-/]\d{2,4}', text, re.IGNORECASE)
+    clauses['Payment'] = re.findall(r'(?:Payment|Compensation)[\s\S]{0,200}?(?:\$\s?\d[\d,\.]*)', text, re.IGNORECASE)
+    clauses['Obligations'] = re.findall(r'(?:Obligations|Duties)[\s\S]{0,200}', text, re.IGNORECASE)
+    return clauses
 
