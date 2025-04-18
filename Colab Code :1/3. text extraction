@@ -1,1 +1,20 @@
+# === Cell 3: Text Extraction ===
+def extract_text(filename):
+    text = ""
+    if filename.endswith(".pdf"):
+        with fitz.open(filename) as doc:
+            for page in doc:
+                text += page.get_text()
+    elif filename.endswith(".docx"):
+        doc_file = docx.Document(filename)
+        text = "\n".join([p.text for p in doc_file.paragraphs])
+    elif filename.endswith(".pptx"):
+        prs = Presentation(filename)
+        for slide in prs.slides:
+            for shape in slide.shapes:
+                if hasattr(shape, "text"):
+                    text += shape.text + "\n"
+    else:
+        raise ValueError("Unsupported file format")
+    return text
 
