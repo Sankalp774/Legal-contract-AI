@@ -1,6 +1,0 @@
-# === Cell 1: Install dependencies ===
-!pip install -q transformers python-docx python-pptx PyMuPDF bert-score nltk
-
-# Download NLTK data
-import nltk
-nltk.download('punkt')
