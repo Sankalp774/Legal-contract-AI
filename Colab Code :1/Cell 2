@@ -1,1 +1,13 @@
+# === Cell 2: Imports & Model Loading ===
+import re
+import fitz                  # PyMuPDF
+import docx
+from pptx import Presentation
+from transformers import pipeline
+from bert_score import score
+
+# Summarization & QG models
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+generator  = pipeline("text2text-generation", model="google/flan-t5-large")
+corrector  = pipeline("text2text-generation", model="google/flan-t5-large")
 
