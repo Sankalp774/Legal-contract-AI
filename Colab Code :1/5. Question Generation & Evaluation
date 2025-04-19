@@ -1,1 +1,25 @@
+# === Cell 5: Legal Question Generation & Evaluation ===
+def generate_legal_questions(text, num_q=3):
+    """Generate comprehension questions for training/Q&A."""
+    # take the first 1200 chars for prompt
+    snippet = text[:1200]
+    prompt = f"Generate {num_q} legal comprehension questions (with answers) based on this contract passage:\n\n{snippet}"
+    out = generator(prompt, max_length=512, do_sample=False)[0]['generated_text']
+    return out.strip()
+
+def evaluate_answer(user_answer, correct_answer):
+    """Compare user answer to reference using BERTScore."""
+    P, R, F1 = score([user_answer], [correct_answer], lang="en", model_type="bert-base-uncased")
+    f1 = F1.item()
+    if f1 > 0.9:
+        return "✅ Correct"
+    elif f1 > 0.6:
+        return "⚠ Partially Correct"
+    else:
+        return "❌ Incorrect"
+
+def correct_answer(user_answer, reference_text):
+    """Auto-correct a user's answer against reference text."""
+    prompt = f"Correct this answer: '{user_answer}' based on the following contract text:\n\n{reference_text}"
+    return corrector(prompt, max_length=256)[0]['generated_text']
 
