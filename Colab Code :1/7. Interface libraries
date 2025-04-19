@@ -1,0 +1,16 @@
+import gradio as gr
+import re
+
+# Install the necessary packages
+!pip install pymupdf
+!pip install python-docx
+!pip install python-pptx
+!pip install bert-score
+!pip install transformers
+
+# Now import the necessary libraries
+import fitz  # PyMuPDF
+import docx
+from pptx import Presentation
+from transformers import pipeline
+from bert_score import score
