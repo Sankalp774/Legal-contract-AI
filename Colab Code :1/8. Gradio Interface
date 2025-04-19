@@ -1,1 +1,121 @@
+import gradio as gr
+import re
+import fitz  # PyMuPDF
+import docx
+from pptx import Presentation
+from transformers import pipeline
+from bert_score import score
+
+# Load models
+summarizer = pipeline("summarization")
+generator = pipeline("text-generation", model="gpt2")
+corrector = pipeline("text-generation", model="gpt2")
+
+# Extract text from file
+def extract_text(file):
+    filename = file.name
+    text = ""
+    if filename.endswith(".pdf"):
+        with fitz.open(filename) as doc:
+            for page in doc:
+                text += page.get_text()
+    elif filename.endswith(".docx"):
+        doc_file = docx.Document(filename)
+        text = "\n".join([p.text for p in doc_file.paragraphs])
+    elif filename.endswith(".pptx"):
+        prs = Presentation(filename)
+        for slide in prs.slides:
+            for shape in slide.shapes:
+                if hasattr(shape, "text"):
+                    text += shape.text + "\n"
+    else:
+        raise ValueError("Unsupported file format")
+    return text
+
+# Summarize text
+def summarize_legal_text(text, max_chunk=1000):
+    chunks = [text[i:i+max_chunk] for i in range(0, len(text), max_chunk)]
+    summary = ""
+    for chunk in chunks:
+        prompt = f"Summarize this legal contract clause, highlighting parties, obligations, payment, and termination:\n\n{chunk}"
+        out = summarizer(prompt, max_length=150, min_length=50, do_sample=False)[0]['summary_text']
+        summary += out + "\n\n"
+    return summary.strip()
+
+# Extract clauses using regex
+def extract_clauses(text):
+    clauses = {
+        'Parties': re.findall(r'(?:between|among)\s+([^.,;\n]+)', text, re.IGNORECASE),
+        'Term': re.findall(r'(?:Term(?:ination)?(?:\s+Clause)?)[\s\S]{0,200}?\d{1,2}[-/]\d{1,2}[-/]\d{2,4}', text, re.IGNORECASE),
+        'Payment': re.findall(r'(?:Payment|Compensation)[\s\S]{0,200}?(?:\$\s?\d[\d,\.]*)', text, re.IGNORECASE),
+        'Obligations': re.findall(r'(?:Obligations|Duties)[\s\S]{0,200}', text, re.IGNORECASE)
+    }
+    return clauses
+
+# Generate legal comprehension questions
+def generate_legal_questions(text, num_q=3):
+    snippet = text[:1200]
+    prompt = f"Generate {num_q} legal comprehension questions (with answers) based on this contract passage:\n\n{snippet}"
+    out = generator(prompt, max_length=512, do_sample=False)[0]['generated_text']
+    return out.strip()
+
+# Evaluate answer
+def evaluate_answer(user_answer, correct_answer):
+    P, R, F1 = score([user_answer], [correct_answer], lang="en", model_type="bert-base-uncased")
+    f1 = F1.item()
+    if f1 > 0.9:
+        return "✅ Correct"
+    elif f1 > 0.6:
+        return "⚠️ Partially Correct"
+    else:
+        return "❌ Incorrect"
+
+# Suggest corrected answer
+def correct_user_answer(user_answer, ref_text):
+    prompt = f"Correct this answer: '{user_answer}' based on the following contract text:\n\n{ref_text}"
+    return corrector(prompt, max_length=256)[0]['generated_text']
+
+# Main processing function for Gradio
+def process_contract(file):
+    raw_text = extract_text(file)
+    summary = summarize_legal_text(raw_text)
+    clauses = extract_clauses(raw_text)
+    questions = generate_legal_questions(raw_text)
+
+    return raw_text, summary, str(clauses), questions
+
+# QA feedback function
+def answer_question(user_ans, correct_ans, ref_text):
+    feedback = evaluate_answer(user_ans, correct_ans)
+    if feedback.startswith("❌"):
+        correction = correct_user_answer(user_ans, ref_text)
+        return feedback, correction
+    return feedback, ""
+
+# Gradio Interface
+with gr.Blocks() as demo:
+    gr.Markdown("# ⚖️ Legal Contract Analyzer")
+
+    with gr.Row():
+        file_input = gr.File(label="Upload Legal Document (.pdf, .docx, .pptx)", file_types=[".pdf", ".docx", ".pptx"])
+        process_btn = gr.Button("Analyze Document")
+
+    raw_output = gr.Textbox(label="📄 Extracted Text", lines=10)
+    summary_output = gr.Textbox(label="🧠 Summary", lines=5)
+    clause_output = gr.Textbox(label="📌 Key Clauses", lines=5)
+    question_output = gr.Textbox(label="📘 Questions", lines=5)
+
+    process_btn.click(fn=process_contract, inputs=file_input, outputs=[raw_output, summary_output, clause_output, question_output])
+
+    gr.Markdown("## 💬 Answer a Question")
+    user_ans = gr.Textbox(label="Your Answer")
+    correct_ans = gr.Textbox(label="Correct Answer (from the generated text)")
+    ref_text = gr.Textbox(label="Reference Contract Text", lines=5)
+    feedback = gr.Textbox(label="🧠 Feedback")
+    correction = gr.Textbox(label="🔄 Suggested Correction")
+
+    answer_btn = gr.Button("Evaluate Answer")
+    answer_btn.click(fn=answer_question, inputs=[user_ans, correct_ans, ref_text], outputs=[feedback, correction])
+
+demo.launch()
 
