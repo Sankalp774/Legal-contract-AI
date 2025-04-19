@@ -1,1 +1,43 @@
+# === Cell 6: Upload & Analyze ===
+from google.colab import files
+
+print("⬆️ Please upload your contract file (.pdf, .docx or .pptx):")
+uploaded = files.upload()
+filename = next(iter(uploaded.keys()))
+
+# 1. Extract raw text
+raw_text = extract_text(filename)
+print(f"\n🗒️ Extracted {len(raw_text)} characters of text.")
+
+# 2. Summarize legally
+legal_summary = summarize_legal_text(raw_text)
+print("\n🔍 Legal Summary:\n")
+print(legal_summary)
+
+# 3. Extract key clauses
+clauses = extract_clauses(raw_text)
+print("\n🧾 Key Clauses Found:")
+for name, items in clauses.items():
+    print(f"\n• {name}:")
+    for clause in items[:3]:
+        print(f"    - {clause.strip()[:100]}{'...' if len(clause)>100 else ''}")
+
+# 4. Generate questions
+questions = generate_legal_questions(raw_text)
+print("\n📘 Generated Legal Questions & Answers:\n")
+print(questions)
+
+# 5. (Optional) Interactive QA
+print("\n💬 Now let's test your understanding. For each question above, enter your answer.")
+for idx, line in enumerate(questions.split("\n"), 1):
+    if line.strip().lower().startswith("q"):
+        print(f"\n{line}")
+        ua = input("Your answer: ").strip()
+        # placeholder: you can manually set the correct answer or parse from 'questions' block
+        ref = input("Enter the reference/correct answer for evaluation: ").strip()
+        fb = evaluate_answer(ua, ref)
+        print(f"🧠 Feedback: {fb}")
+        if fb.startswith("❌"):
+            corr = correct_answer(ua, raw_text)
+            print("🔄 Suggested Correction:\n", corr)
 
