@@ -30,7 +30,18 @@ Legal professionals in quick contract review.
 Developers building legaltech solutions.
 
 Educators creating assessment content from legal texts.
-## Roadmap
-- [x] Clause classification
-- [ ] Contract summarization
-- [ ] Risk analysis
+
+Tech Stack
+
+
+Python
+
+Gradio – For the UI
+
+Transformers (Hugging Face) – Summarization & text generation
+
+BERTScore – Answer evaluation
+
+PyMuPDF / PDFplumber – PDF parsing
+
+Scikit-learn / SpaCy / NLTK – NLP utilities
