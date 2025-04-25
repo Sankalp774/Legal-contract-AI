@@ -19,6 +19,8 @@ Features
 🖼️ User Interface – Clean and minimal interface built using Gradio.
 
 Use Case
+
+
 This tool is built to assist:
 
 Law students for exam preparation.
