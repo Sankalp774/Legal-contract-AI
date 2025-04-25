@@ -1,5 +1,7 @@
-# AI Contract Tool
-An AI-powered tool to analyze contracts, classify clauses, and extract key insights for legal and business use.
+# Legal Contract Analyzer by AI
+A smart legal document analysis tool that simplifies and streamlines the process of understanding legal contracts. This project uses NLP techniques to summarize, extract key clauses, generate questions, and evaluate answers, making it ideal for law students, professionals, and anyone dealing with complex legal texts.
+
+
 
 ## Features
 - Classify clauses (e.g., Termination, Confidentiality).
