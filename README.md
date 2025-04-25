@@ -18,11 +18,16 @@ Features
 
 🖼️ User Interface – Clean and minimal interface built using Gradio.
 
-## Setup
-1. Clone this repository.
-2. Create a virtual environment: `python -m venv venv`.
-3. Install dependencies: `pip install -r requirements.txt`.
+Use Case
+This tool is built to assist:
 
+Law students for exam preparation.
+
+Legal professionals in quick contract review.
+
+Developers building legaltech solutions.
+
+Educators creating assessment content from legal texts.
 ## Roadmap
 - [x] Clause classification
 - [ ] Contract summarization
