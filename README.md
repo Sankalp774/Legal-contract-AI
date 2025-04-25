@@ -18,9 +18,7 @@ A smart legal document analysis tool that simplifies and streamlines the process
 
 🖼️ User Interface – Clean and minimal interface built using Gradio.
 
-##Use Case
-
-
+💡 Use Case
 This tool is built to assist:
 
 Law students for exam preparation.
@@ -31,9 +29,7 @@ Developers building legaltech solutions.
 
 Educators creating assessment content from legal texts.
 
-##Tech Stack
-
-
+🧰 Tech Stack
 Python
 
 Gradio – For the UI
