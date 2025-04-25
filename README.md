@@ -3,10 +3,13 @@ A smart legal document analysis tool that simplifies and streamlines the process
 
 
 
-## Features
-- Classify clauses (e.g., Termination, Confidentiality).
-- Summarize legal contracts.
-- Extract key entities (e.g., names, dates, amounts).
+Features
+✅ Contract Summarization – Automatically generate concise summaries of long legal documents.
+🧠 Clause Extraction – Identify important clauses like termination, confidentiality, indemnity, etc.
+❓ Question Generation – Generate MCQs, one-word answers, and long-form questions from legal documents.
+📝 Answer Evaluation – Score user-provided answers using semantic similarity (BERTScore).
+✍️ Auto-Correction – Provide improved versions of user answers using a text generation model.
+🖼️ User Interface – Clean and minimal interface built using Gradio.
 
 ## Setup
 1. Clone this repository.
