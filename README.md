@@ -3,7 +3,7 @@ A smart legal document analysis tool that simplifies and streamlines the process
 
 
 
-Features
+##Features
 
 
 ✅ Contract Summarization – Automatically generate concise summaries of long legal documents.
@@ -18,7 +18,7 @@ Features
 
 🖼️ User Interface – Clean and minimal interface built using Gradio.
 
-Use Case
+##Use Case
 
 
 This tool is built to assist:
@@ -31,7 +31,7 @@ Developers building legaltech solutions.
 
 Educators creating assessment content from legal texts.
 
-Tech Stack
+##Tech Stack
 
 
 Python
