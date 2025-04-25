@@ -5,6 +5,7 @@ A smart legal document analysis tool that simplifies and streamlines the process
 
 Features
 
+
 ✅ Contract Summarization – Automatically generate concise summaries of long legal documents.
 
 🧠 Clause Extraction – Identify important clauses like termination, confidentiality, indemnity, etc.
