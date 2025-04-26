@@ -46,6 +46,12 @@ PyMuPDF / PDFplumber – PDF parsing
 
 Scikit-learn / SpaCy / NLTK – NLP utilities
 
+PyMuPDF (fitz) – For parsing and extracting text from PDFs
+
+NLTK – For text preprocessing (tokenization, stopwords)
+
+
+
 🤝 Contribution
 
 Pull requests are welcome! If you'd like to add features or fix bugs, feel free to fork the repo and submit a PR.
