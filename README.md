@@ -50,6 +50,9 @@ PyMuPDF (fitz) – For parsing and extracting text from PDFs
 
 NLTK – For text preprocessing (tokenization, stopwords)
 
+Scikit-learn – For keyword extraction (TF-IDF based)
+
+Sentence Transformers – (If you used it) for semantic similarity 
 
 
 🤝 Contribution
