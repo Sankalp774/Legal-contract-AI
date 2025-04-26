@@ -54,6 +54,10 @@ Scikit-learn – For keyword extraction (TF-IDF based)
 
 Sentence Transformers – (If you used it) for semantic similarity 
 
+Torch – Backend for BERTScore and Transformer models
+
+TQDM – For progress bars 
+
 
 🤝 Contribution
 
