@@ -45,3 +45,7 @@ BERTScore – Answer evaluation
 PyMuPDF / PDFplumber – PDF parsing
 
 Scikit-learn / SpaCy / NLTK – NLP utilities
+
+🤝 Contribution
+
+Pull requests are welcome! If you'd like to add features or fix bugs, feel free to fork the repo and submit a PR.
